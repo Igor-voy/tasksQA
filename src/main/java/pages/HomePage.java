@@ -1,43 +1,48 @@
 package pages;
 
+import elements.Button;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 
 public class HomePage extends BasePage{
+    private Button alertsFramesWindowsButton;
+    private By homePageElement = By.xpath("//img[@class='banner-image']");
+    private Button elementsButton;
 
-    private By unique_locator = By.xpath("//*[@class='gutter_header gutter_top']");
-    private By aboutBtn = By.xpath("//*[contains(@class, 'supernav_container')]" +
-            "//a[contains(@class, 'menuitem ')][3]");
-    private final By newTab = By.xpath("//*[@id='noteworthy_tab']");
-    private final By topSellers = By.xpath("//*[contains(@class, 'popup_menu_browse')]" +
-            "//a[contains(text(), 'Top Sellers')]");
-
-    public HomePage(WebDriver driver) {
-        super(driver);
+    public HomePage(String pageName) {
+        super(pageName);
+        alertsFramesWindowsButton = new Button(By.xpath("//div[@class='card-body']" +
+                "//h5[contains(text(), 'Alerts')]"), "Кнопка Alerts," +
+                "Frames, Windows");
+        elementsButton = new Button(By.xpath("//div[@class='card-body']" +
+                "//h5[contains(text(), 'Elements')]"), "Кнопка Elements");
     }
 
-    public void open(){
-        super.open("https://store.steampowered.com/");
-        waitForVisibility(unique_locator);
+    public void clickOnAlertsFramesWindows() {
+        alertsFramesWindowsButton.clickOnButton();
     }
 
-    public void clickAboutBtn(){
-        super.click(aboutBtn);
+    public void clickElements() {
+        elementsButton.clickOnButton();
     }
 
-    public void moveToNew(){
-        super.moveToElem(newTab);
+    public boolean isOpenHomePage() {
+        logger.info("Открываем страницу " + pageName);
+        return isPageOpen(homePageElement);
     }
 
-    public void clickTopSellers(){
-        super.click(topSellers);
+    public AlertsPage getAlertsPage() {
+        return new AlertsPage("Page with alerts");
     }
 
-    public AboutPage getAboutPage(){
-        return new AboutPage(driver);
+    public NestedFramesPage getNestedFramesPage() {
+        return new NestedFramesPage("Page with nested frames");
     }
 
-    public TopSellersPage getTopSellersPage(){
-        return new TopSellersPage(driver);
+    public BrowserWindowsPage getBrowserWindowsPage() {
+        return new BrowserWindowsPage("Page with handles");
+    }
+
+    public TablesPage getTablesPage() {
+        return new TablesPage("Page with tables");
     }
 }
